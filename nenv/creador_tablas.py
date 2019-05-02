@@ -3,11 +3,11 @@ import time
 import os
 import re
 
-f = open('log.txt', 'r')  # Carga del archivo
+f = open('log.txt', 'r')
 nt = 0
 tabla3 = [' ']
 tablaf = []
-def follow(f):  # Funcion que lee el ultimo renglon del archivo, si detecta cambios espera 0.3 segundos para volver a correr
+def follow(f):
     f.seek(0, os.SEEK_END)
     while True:
         line = f.readline()
@@ -23,30 +23,34 @@ for line in loglines:
     x = []
     y = []
     i = 0
-    s = re.findall('url=(.*?) service=', line)  # Busca todo lo que este dentro de " " del archivo
+    s = re.findall('url=(.*?) service=', line)
     for i in range(len(s)):
-        texto = s[i].replace(" ",
-                             "_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
-        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
 
-    s = re.findall('"(.*?)"', line)  # Busca todo lo que este dentro de " " del archivo
+    s = re.findall('"(.*?)"', line)
 
     for i in range(len(s)):
-        texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
-        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
 
-    s = re.findall('catdesc=(.*?) url=', line)  # Busca todo lo que este dentro de " " del archivo
+    s = re.findall('catdesc=(.*?) url=', line)
     for i in range(len(s)):
-        texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
-        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
+    line = line.replace(' date','logDate')
+    line = line.replace(' time','logTime')
+    line = line.replace('type','logType')
+    line = line.replace('level','logLevel')
+    line = line.replace('user','logUser')
+    line = line.replace('logver','glogver',1)
 
     espacios = line.count(' ')
-    for i in range(espacios):  # Arreglo para separar el texto, primero separa por espacios, y luego separa por el signo de igual
+    for i in range(espacios):
         x.append(line.split(' ')[i].split('=')[0])
         y.append(line.split(' ')[i].split('=')[1])
-
-    x.append(line.split(' ')[2].split('=')[0])
-    y.append(line.split(' ')[2].split('=')[1])
+    x.append(line.split(' ')[espacios].split('=')[0])
+    y.append(line.split(' ')[espacios].split('=')[1])
 
     tabla1 = 'Create table '
     ntabla = "tabla"
@@ -56,30 +60,28 @@ for line in loglines:
     for e in range(len(x)-1):
         campo = str(x[e])
         valor = str(y[e])
-        #print(valor)
+
         if valor.isdigit() == True:
             valores = valores + ' '+campo+' int,'
         else:
-            valores = valores + ' '+campo+' varchar,'
+            if campo == 'url':
+                valores = valores + ' ' + campo + ' varchar(1000),'
+            else:
+                valores = valores + ' '+campo+' varchar(200),'
     campo = str(x[len(x)-1])
     valor = str(y[len(y)-1])
-
     if valor.isdigit() == True:
         valores = valores + ' '+campo+' int );'
     else:
-        valores = valores + ' '+campo+' varchar );'
+        valores = valores + ' '+campo+' varchar(200));'
 
     if valores not in tabla3:
         rtabla = tabla1+ntabla+str(nt)+valores
-        #print rtabla
         tablaf.append(rtabla)
         tabla3.append(valores)
         nt += 1
-#    print(line)
 
 aTablas = open('archivos_tablas/tablas.txt','a')
 for e in range(len(tablaf)):
     aTablas.write(tablaf[e]+"\n")
 aTablas.close()
-
-#print(len(tabla3))
