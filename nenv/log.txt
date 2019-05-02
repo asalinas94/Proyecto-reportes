@@ -1,0 +1,4 @@
+name=Allan id=1 os="Windows_7"
+name=Allan id=1 os="Windows_7"
+date=2019-02-26 time=22:02:18 devname=FWF-POLIMEX devid=FWF30E5618003179 logid="0101037131" type="event" subtype="vpn" level="error" vd="root" eventtime=1551240137 logdesc="IPsec ESP" msg="IPsec ESP" action="error" remip=45.79.106.170
+name=Allan id=1 os="Windows_7"
