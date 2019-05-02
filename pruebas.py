@@ -1,9 +1,13 @@
+from datetime import time,date,datetime
 ntable = "tabla"
 i = 0
 
 a = ['a','b',5]
 b = ""
 create = "CREATE TABLE"+ str(i)
+fecha = 2017-10-11
+
+#fecha2 = datetime.strptime(fecha,"%Y-%m-%d")
 
 #for e in range(len(a)):
     #valor = str(a[e])
@@ -13,12 +17,5 @@ create = "CREATE TABLE"+ str(i)
 #        print( a[e]+" no es numero")
     #b = b+str(a[e])
 #print(b)
-print a
-print(len(a))
-for e in range(len(a)):
-    a.append(e)
-    print a
-print(len(a))
 
-c = 'c'
-print(str(c) in a)
+print(fecha)

@@ -27,6 +27,7 @@ for line in loglines:
     for i in range(len(s)):
         texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
         line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+
     print(line)
     for i in range(2):  # Arreglo para separar el texto, primero separa por espacios, y luego separa por el signo de igual
         x = line.split(' ')[i].split('=')[0]  # El corte se hace en la posicion 0 que seria el valor de la columna

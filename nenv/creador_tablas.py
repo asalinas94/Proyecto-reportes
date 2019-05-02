@@ -1,7 +1,8 @@
+import io
 import time
 import os
 import re
-from dateutil.parser import parse
+
 f = open('log.txt', 'r')  # Carga del archivo
 nt = 0
 tabla3 = [' ']
@@ -22,11 +23,23 @@ for line in loglines:
     x = []
     y = []
     i = 0
+    s = re.findall('url=(.*?) service=', line)  # Busca todo lo que este dentro de " " del archivo
+    for i in range(len(s)):
+        texto = s[i].replace(" ",
+                             "_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
+        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+
     s = re.findall('"(.*?)"', line)  # Busca todo lo que este dentro de " " del archivo
 
     for i in range(len(s)):
         texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
         line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+
+    s = re.findall('catdesc=(.*?) url=', line)  # Busca todo lo que este dentro de " " del archivo
+    for i in range(len(s)):
+        texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
+        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+
     espacios = line.count(' ')
     for i in range(espacios):  # Arreglo para separar el texto, primero separa por espacios, y luego separa por el signo de igual
         x.append(line.split(' ')[i].split('=')[0])
@@ -43,6 +56,7 @@ for line in loglines:
     for e in range(len(x)-1):
         campo = str(x[e])
         valor = str(y[e])
+        #print(valor)
         if valor.isdigit() == True:
             valores = valores + ' '+campo+' int,'
         else:
@@ -57,11 +71,15 @@ for line in loglines:
 
     if valores not in tabla3:
         rtabla = tabla1+ntabla+str(nt)+valores
-        print rtabla
+        #print rtabla
         tablaf.append(rtabla)
         tabla3.append(valores)
         nt += 1
+#    print(line)
 
+aTablas = open('archivos_tablas/tablas.txt','a')
+for e in range(len(tablaf)):
+    aTablas.write(tablaf[e]+"\n")
+aTablas.close()
 
-print(tablaf)
-print(len(tabla3))
+#print(len(tabla3))
