@@ -1,46 +1,75 @@
+import io
 import time
 import os
 import re
-#import mysql.connector as mariadb
-
-#mariadb_connection = mariadb.connect(user='root', password='RealNet2019', database='pruebapy')  # Conexion con MariaDB
-#cursor = mariadb_connection.cursor()  # Se crea un cursor, que sera el encargado de la interaccion con la base de datos
-
-f = open('log.txt', 'r')  # Carga del archivo
 
 
-def follow(f):  # Funcion que lee el ultimo renglon del archivo, si detecta cambios espera 0.3 segundos para volver a correr
-    f.seek(0, os.SEEK_END)
-    while True:
-        line = f.readline()
-        if not line:
-            time.sleep(0.3)
-            continue
-        yield line
-loglines = follow(f)
+columnas = []
+columnasInsert = []
+columna = ""
+aColumnas = open('archivos_tablas/columnas.txt','r')
+loglines = (aColumnas)
+for line in loglines:
+    columnas.append(line)
+aColumnas.close()
+
+loglines = open('log.txt','r')
+
 for line in loglines:
     a = ""
     b = ""
+    x = []
+    y = []
     i = 0
-    s = re.findall('"(.*?)"', line)  # Busca todo lo que este dentro de " " del archivo
+    s = re.findall('url=(.*?) service=', line)
+    for i in range(len(s)):
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
+
+    s = re.findall('"(.*?)"', line)
 
     for i in range(len(s)):
-        texto = s[i].replace(" ","_")  # De la busqueda anterior, dentro del texto remplaza los espacios por guiones bajos
-        line = line.replace(s[i], texto)  # Remplaza el texto corregido con guion bajo en el texto con espacios
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
 
-    print(line)
-    for i in range(2):  # Arreglo para separar el texto, primero separa por espacios, y luego separa por el signo de igual
-        x = line.split(' ')[i].split('=')[0]  # El corte se hace en la posicion 0 que seria el valor de la columna
-        y = line.split(' ')[i].split('=')[1]  # El corte se hace en la posicion 1 que seria el valor de la fila
-        b = b + "'" + y + "'" + ","  # Se agrega el valor del corte en la posicion 1
+    s = re.findall('catdesc=(.*?) url=', line)
+    for i in range(len(s)):
+        texto = s[i].replace(" ","_")
+        line = line.replace(s[i], texto)
+    line = line.replace(' date',' logDate')
+    line = line.replace(' time',' logTime')
+    line = line.replace('type','logType')
+    line = line.replace('level','logLevel')
+    line = line.replace('user','logUser')
+    line = line.replace('logver','glogver',1)
+    espacios = line.count(' ')
+    for i in range(espacios):
+        x.append(line.split(' ')[i].split('=')[0])
+        y.append(line.split(' ')[i].split('=')[1])
+    x.append(line.split(' ')[espacios].split('=')[0])
+    y.append(line.split(' ')[espacios].split('=')[1])
+#____________________---------------_____________
+    valores = "("
+    vcolumna = "("
+    for e in range(len(x) - 1):
+        campo = str(x[e])
+        valor = str(y[e])
+        vcolumna = vcolumna+ valor+","
+        valores = valores + campo+","
 
-    x = line.split(' ')[2].split('=')[0]
-    y = line.split(' ')[2].split('=')[1]
-    b = b + "'" + y + "'"
+    campo = str(x[len(x) - 1])
+    valor = str(y[len(y) - 1])
+    valores = valores +campo +')\n'
+    vcolumna = vcolumna +  valor+');'
+    consulta = ""
 
-    z = ("Insert into amenazas values(" + b + ");")  # Se construye el script de insercion con los valores de b
-    print(z)
-    #cursor.execute(z)  # Se ejecuta el script en la base de datos mediante el cursor
-    #mariadb_connection.commit()  # Se hace el commit de la informacion para que se guarde
+    for e in range(len(columnas)):
+        if(valores == columnas[e]):
+            #print('valor de e : '+str(e) + "valor de valores: " + str(valores))
+            consulta = "insert into table"+str(e)+str(valores)+" values"+ str(vcolumna)
 
-#mariadb_connection.close()
+    aInserts = open("archivos_tablas/inserts.txt", 'a')
+    aInserts.write(str(consulta))
+    aInserts.close()
+    print(consulta)
+loglines.close()
