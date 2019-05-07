@@ -7,6 +7,8 @@ f = open('log.txt', 'r')
 nt = 0
 tabla3 = [' ']
 tablaf = []
+columnas = []
+columna = ""
 def follow(f):
     f.seek(0, os.SEEK_END)
     while True:
@@ -38,8 +40,8 @@ for line in loglines:
     for i in range(len(s)):
         texto = s[i].replace(" ","_")
         line = line.replace(s[i], texto)
-    line = line.replace(' date','logDate')
-    line = line.replace(' time','logTime')
+    line = line.replace(' date',' logDate')
+    line = line.replace(' time',' logTime')
     line = line.replace('type','logType')
     line = line.replace('level','logLevel')
     line = line.replace('user','logUser')
@@ -56,11 +58,11 @@ for line in loglines:
     ntabla = "tabla"
     valores = "("
     tabla2 = tabla1 + ntabla + str(nt)+'('
-
+    columna = "("
     for e in range(len(x)-1):
         campo = str(x[e])
         valor = str(y[e])
-
+        columna = columna+campo+","
         if valor.isdigit() == True:
             valores = valores + ' '+campo+' int,'
         else:
@@ -70,6 +72,7 @@ for line in loglines:
                 valores = valores + ' '+campo+' varchar(200),'
     campo = str(x[len(x)-1])
     valor = str(y[len(y)-1])
+    columna = columna +campo+")"
     if valor.isdigit() == True:
         valores = valores + ' '+campo+' int );'
     else:
@@ -79,9 +82,18 @@ for line in loglines:
         rtabla = tabla1+ntabla+str(nt)+valores
         tablaf.append(rtabla)
         tabla3.append(valores)
+        columnas.append(columna)
         nt += 1
+        print(columna)
 
 aTablas = open('archivos_tablas/tablas.txt','a')
 for e in range(len(tablaf)):
     aTablas.write(tablaf[e]+"\n")
 aTablas.close()
+
+aColumnas = open('archivos_tablas/columnas.txt','w')
+for e in range(len(columnas)):
+    aColumnas.write(columnas[e]+"\n")
+aColumnas.close()
+
+#print(columnas)

@@ -1,0 +1,3 @@
+(glogver,itime,dtime,logDate,logTime,logver,logLevel,uid,vd,fctver,os,usingpolicy,fgtserial,emsserial,devid,hostname,pcdomain,clientfeature,deviceip,devicemac,logType,logUser,id,msg)
+(glogver,itime,dtime,logDate,logTime,logver,logLevel,uid,vd,fctver,os,usingpolicy,fgtserial,emsserial,devid,hostname,pcdomain,clientfeature,deviceip,devicemac,logType,logUser,id,avsig,avsiglastupdate)
+(glogver,itime,dtime,logDate,logTime,logver,logLevel,uid,vd,fctver,os,usingpolicy,fgtserial,emsserial,devid,hostname,pcdomain,clientfeature,deviceip,devicemac,logType,logUser,id,avsig,avsigext,avsiglastupdate,vulnsig)
