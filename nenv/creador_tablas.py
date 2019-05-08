@@ -40,12 +40,28 @@ for line in loglines:
     for i in range(len(s)):
         texto = s[i].replace(" ","_")
         line = line.replace(s[i], texto)
-    line = line.replace(' date',' logDate')
-    line = line.replace(' time',' logTime')
-    line = line.replace('type','logType')
-    line = line.replace('level','logLevel')
-    line = line.replace('user','logUser')
-    line = line.replace('logver','glogver',1)
+    for i in range(7):
+        cambiodate = " <"+str(i)+">date"
+        line = line.replace(str(cambiodate), ' date_')
+
+    line = line.replace('date','date_')
+    line = line.replace(' time',' time_')
+    line = line.replace('type','type_')
+    line = line.replace('level','leve_')
+    line = line.replace('user','user_')
+    line = line.replace('logver','logver_',1)
+    line = line.replace('action','action_')
+    line = line.replace('status','status_')
+    line = line.replace('group','group_')
+    line = line.replace('log','log_')
+    line = line.replace('count','count_')
+    line = line.replace('desc','desc_')
+    line = line.replace('mode','mode_')
+    line = line.replace('version','version_')
+    line = line.replace('from','from_')
+    line = line.replace('to','to_')
+    line = line.replace('checksum','checksum_')
+    line = line.replace('file','file_')
 
     espacios = line.count(' ')
     for i in range(espacios):
@@ -64,17 +80,20 @@ for line in loglines:
         valor = str(y[e])
         columna = columna+campo+","
         if valor.isdigit() == True:
-            valores = valores + ' '+campo+' int,'
+            valores = valores + ' '+campo+' int unsigned,'
         else:
             if campo == 'url':
                 valores = valores + ' ' + campo + ' varchar(1000),'
             else:
-                valores = valores + ' '+campo+' varchar(200),'
+                if campo == 'cfgattr':
+                    valores = valores + ' '+campo+' varchar(1000),'
+                else:
+                    valores = valores + ' ' + campo + ' varchar(200),'
     campo = str(x[len(x)-1])
     valor = str(y[len(y)-1])
     columna = columna +campo+")"
     if valor.isdigit() == True:
-        valores = valores + ' '+campo+' int );'
+        valores = valores + ' '+campo+' int unsigned);'
     else:
         valores = valores + ' '+campo+' varchar(200));'
 
@@ -84,7 +103,6 @@ for line in loglines:
         tabla3.append(valores)
         columnas.append(columna)
         nt += 1
-        print(columna)
 
 aTablas = open('archivos_tablas/tablas.txt','a')
 for e in range(len(tablaf)):
