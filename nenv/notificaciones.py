@@ -9,9 +9,9 @@ mariadb_connection = mariadb.connect(user='root',password='RealNet2019',database
 cursor = mariadb_connection.cursor()
 
 def envioCorreo(mensaje):
-    sendto = 'allan.salinas.ramirez@gmail.com'
+    sendto = 'asalinas@realnet.com.mx'
     user = 'allan.salinas.ramirez@gmail.com'
-    #password = 'Reflektor94'
+    #password = ''
     smtpsrv = 'smtp.gmail.com'
     smtpserver = smtplib.SMTP(smtpsrv, 587)
     smtpserver.ehlo()
@@ -20,7 +20,7 @@ def envioCorreo(mensaje):
     smtpserver.login(user, password)
     smtpserver.sendmail(user, sendto,mensaje)
 
-    print 'done!'
+    print 'it works!'
     smtpserver.close()
 
 
@@ -43,7 +43,6 @@ def deteccionVirus(v):
               ''.format(Encargado,Nombre,v[1],v[36],v[33],v[15],v[26])
     Asunto = 'Subject: {}\n\n {}'.format(asunto,Mensaje)
     #envioCorreo(Asunto)
-    print(Asunto)
     return
 
 
