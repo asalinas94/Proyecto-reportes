@@ -3,14 +3,6 @@ import time
 import os
 import re
 
-def follow(f):
-    f.seek(0, os.SEEK_END)
-    while True:
-        line = f.readline()
-        if not line:
-            time.sleep(0.3)
-            continue
-        yield line
 
 columnas = []
 columnasInsert = []
@@ -20,7 +12,6 @@ loglines = (aColumnas)
 for line in loglines:
     columnas.append(line)
 aColumnas.close()
-
 
 loglines = open('log.txt','r')
 
